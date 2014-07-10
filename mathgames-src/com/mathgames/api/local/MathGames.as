@@ -83,7 +83,7 @@
             config["hosted_env"] = flashVars["hosted_env"];
             config["entity"] = flashVars["entity"];
 
-            var staging :Boolean = config["hosted"] && config["hosted_env"] === "staging";
+            var staging :Boolean = config["hosted"] && config["hosted_env"] === "staging" && config["staging_swf"];
             var swfUrl :String = staging ? config["staging_swf"] : PRODUCTION_API_SWF_URL;
 
             _remote.loadSWF (swfUrl, _logFunc, dispatchErrorOr (function():void {
