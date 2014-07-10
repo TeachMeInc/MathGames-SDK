@@ -189,7 +189,6 @@ import flash.utils.*;
 
 class RemoteSWF
 {
-
     static private const SDK_VERSION_CODE :String = "0";
     static private const BUST_CACHE :Boolean = true;
 
@@ -223,7 +222,14 @@ class RemoteSWF
         _log = log;
         _swfLoadCallback = callback;
 
-        var linkedApi :Class = getDefinitionByName("com.mathgames.api.remote.SWFMain") as Class;
+        var linkedApi :Class;
+
+        try {
+            linkedApi = getDefinitionByName("com.mathgames.api.remote.SWFMain") as Class;
+        } catch (e:Error) {
+            linkedApi = null;
+        }
+
         if (linkedApi) {
             _swfLoader = null;
             _swfContent = new linkedApi;
