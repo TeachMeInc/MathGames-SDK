@@ -125,8 +125,6 @@
                 }
             }
 
-            config["answer_callback"] = answerCallback;
-
             _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
         }
 
@@ -156,12 +154,6 @@
         private function logoutCallback () :void
         {
             dispatchEvent (new MathGamesEvent (MathGamesEvent.LOGOUT));
-        }
-
-        private function answerCallback (data:Object) :void
-        {
-            dispatchEvent (new MathGamesEvent (MathGamesEvent.QUESTION_ANSWERED,
-                new AnswerData (data["correct"], data["clickTarget"], data["averageAnswerTime"])));
         }
 
     // ----- Misc ---------------------------------------------------------------------------------

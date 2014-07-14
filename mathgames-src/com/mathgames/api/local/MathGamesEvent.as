@@ -4,18 +4,17 @@ package com.mathgames.api.local
 
     public class MathGamesEvent extends Event
     {
-        static public const ERROR :String = "MathGamesEvent.ERROR";
-        static public const CONNECTED :String = "MathGamesEvent.CONNECTED";
-        static public const AUTHENTICATED :String = "MathGamesEvent.AUTHENTICATED";
-        static public const AUTH_CANCELLED :String = "MathGamesEvent.AUTH_CANCELLED";
-        static public const LOGOUT :String = "MathGamesEvent.LOGOUT";
+        static public const ERROR :String = "mg-error";
+        static public const CONNECTED :String = "mg-connected";
+        static public const AUTHENTICATED :String = "mg-authenticated";
+        static public const AUTH_CANCELLED :String = "mg-auth-cancel";
+        static public const LOGOUT :String = "mg-logout";
 
-        static public const SESSION_READY :String = "MathGamesEvent.SESSION_READY";
-        static public const QUESTION_ANSWERED :String = "MathGamesEvent.QUESTION_ANSWERED";
+        static public const SESSION_READY :String = "mg-session-ready";
+        static public const QUESTION_READY :String = "mg-question-ready";
 
-        static public const PROGRESS_OPENED :String = "MathGamesEvent.PROGRESS_OPENED";
-        static public const PROGRESS_CLOSED :String = "MathGamesEvent.PROGRESS_CLOSED";
-
+        static public const PROGRESS_OPENED :String = "mg-progress-open";
+        static public const PROGRESS_CLOSED :String = "mg-progress-close";
 
         public var data :Object;
 
