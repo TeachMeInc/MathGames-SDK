@@ -142,8 +142,6 @@ package
     }
 }
 
-
-
 import flash.display.*;
 import flash.events.*;
 import flash.external.*;
@@ -187,14 +185,12 @@ class GameController
 }
 
 
-
-
-
-
-
-
-
-
+// The following block is used internally by TeachMe Inc for debugging.
+// You can safely ignore it.
+CONFIG::DEV {
+import com.mathgames.api.remote.SWFMain;
+class __forceApiImport extends SWFMain {}
+}
 
 
 
