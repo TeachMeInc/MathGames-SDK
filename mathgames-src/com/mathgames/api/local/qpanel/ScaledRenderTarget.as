@@ -45,7 +45,7 @@ package com.mathgames.api.local.qpanel
 
             if (_child) _boundsParent.removeChild (_child);
 
-            var displayObject :Bitmap = new Bitmap (bitmapData, "auto", true);
+            var displayObject :DisplayObject = renderBitmapData (bitmapData);
 
             if (_color) displayObject.transform.colorTransform = _color;
 
@@ -69,6 +69,18 @@ package com.mathgames.api.local.qpanel
 
             _child.x = _boundsX;
             _child.y = _boundsY;
+        }
+
+        static private function renderBitmapData (bmpData:BitmapData) :DisplayObject
+        {
+            var spr :Sprite = new Sprite;
+            var bitmap :Bitmap = new Bitmap (bitmapData, "auto", true);
+
+            spr.addChild (bitmap);
+            bitmap.x = -bitmap.width / 2;
+            bitmap.y = -bitmap.height / 2;
+            // disp.z = 1; // Setting the z coord to non-zero forces the Flash Player to use better smoothing when scaling.
+            return spr;
         }
 
         public function clear () :void
