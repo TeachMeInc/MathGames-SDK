@@ -116,6 +116,7 @@
 
         public function startSession (config:Object) :void
         {
+            config ["question_ready_callback"] = questionReadyCallback;
             _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
         }
 
@@ -140,6 +141,17 @@
         private function progressReadyCallback () :void
         {
             dispatchEvent (new MathGamesEvent (MathGamesEvent.PROGRESS_OPENED));
+        }
+
+        private function questionReadyCallback (params:Object) :void
+        {
+            var question :Question = new Question;
+            question.question = params["question"];
+            question.answers = params["answers"];
+            question.correctIndex = params["correctIndex"];
+            question.doAnswer = params["doAnswer"];
+
+            dispatchEvent (new MathGamesEvent (MathGamesEvent.QUESTION_READY, question));
         }
 
         private function logoutCallback () :void
