@@ -93,10 +93,10 @@ Valid options for configuration are as follows:
 var configuration:Object = {
     "pool_key": "LEVEL_ONE", // (OPTIONAL) Specifies the desired question pool to use for this session.
                              // If none is provided then the previously specified one is used.
+    "clear_progress": true, // (OPTIONAL) Clears accumulated progress which is viewed in the showProgress screen.
     "question_panel": { // (OPTIONAL) Configuration for using a custom question panel.
         "question_area": someDisplayObject, // Specifies a custom area to place the question.
         "question_color": 0xRRGGBB,         // Color used to render the question, default black.
-        "clear_progress": true, // (OPTIONAL) Clears accumulated progress which is viewed in the showProgress screen.
         "answer_buttons": [
             { "bounds": someDisplayObject, // (REQUIRED) The region where the answer should be rendered.
               "click_target": someDisplayObject, // (REQUIRED) A DisplayObject which receives click events for this answer.
