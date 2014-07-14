@@ -7,8 +7,11 @@ package com.mathgames.api.local.qpanel
     import flash.geom.*;
     import flash.utils.*;
 
-    final public class QuestionPanel
+    final public class QuestionPanel extends EventDispatcher
     {
+        static public const EVENT_ANSWER_CORRECT :String = "qp-ans-correct";
+        static public const EVENT_ANSWER_INCORRECT :String = "qp-ans-incorrect";
+
         static private const ANSWER_BUTTON_COUNT :int = 4;
 
         private var _questionRenderTarget :ScaledRenderTarget;
@@ -99,10 +102,13 @@ package com.mathgames.api.local.qpanel
             }
 
             var choiceIndex :int = _answerClickTargets.indexOf (e.target);
+            var correct :Boolean = choiceIndex == _activeQuestion.correctIndex;
 
             var answerFunc :Function = _activeQuestion.doAnswer;
             _activeQuestion = null;
             answerFunc (choiceIndex);
+
+            dispatchEvent (new Event (correct ? EVENT_ANSWER_CORRECT : EVENT_ANSWER_INCORRECT));
         }
     }
 }
