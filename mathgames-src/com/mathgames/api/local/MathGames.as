@@ -117,6 +117,7 @@
         public function startSession (config:Object) :void
         {
             config ["question_ready_callback"] = questionReadyCallback;
+            config ["average_time_change_callback"] = averageTimeChangeCallback;
             _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
         }
 
@@ -152,6 +153,11 @@
             question.doAnswer = params["doAnswer"];
 
             dispatchEvent (new MathGamesEvent (MathGamesEvent.QUESTION_READY, question));
+        }
+
+        private function averageTimeChangeCallback (time:int) :void
+        {
+            dispatchEvent (new MathGamesEvent (MathGamesEvent.AVERAGE_TIME_CHANGE, time));
         }
 
         private function logoutCallback () :void

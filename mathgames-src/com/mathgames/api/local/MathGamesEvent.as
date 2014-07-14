@@ -11,7 +11,9 @@ package com.mathgames.api.local
         static public const LOGOUT :String = "mg-logout";
 
         static public const SESSION_READY :String = "mg-session-ready";
-        static public const QUESTION_READY :String = "mg-question-ready";
+        static public const QUESTION_READY :String = "mg-question-ready"; // data : Question
+
+        static public const AVERAGE_TIME_CHANGE :String = "mg-avg-time-change"; // data : int (milliseconds per question)
 
         static public const PROGRESS_OPENED :String = "mg-progress-open";
         static public const PROGRESS_CLOSED :String = "mg-progress-close";
