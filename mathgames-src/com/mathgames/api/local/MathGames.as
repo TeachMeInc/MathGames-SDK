@@ -116,15 +116,6 @@
 
         public function startSession (config:Object) :void
         {
-            // If we're passing in the question panel objects, then added parent references here
-            //  to avoid security sandbox violations which occur when trying to access "parent" remotely.
-            if (config["question_panel"] !== undefined) {
-                config["question_panel"]["question_area_parent"] = config["question_panel"]["question_area"].parent;
-                for each (var btn:Object in config["question_panel"]["answer_buttons"]) {
-                    btn["bounds_parent"] = btn["bounds"].parent;
-                }
-            }
-
             _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
         }
 
