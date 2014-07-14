@@ -1,15 +1,15 @@
 package
 {
     import com.mathgames.api.local.*;
+    import com.mathgames.api.local.qpanel.*;
     import flash.display.*;
     import flash.events.*;
 
     public class SampleGameMain extends MovieClip
     {
-        static private const USE_CUSTOM_QUESTION_AREA :Boolean = false;
-
         private var _mathgames :IMathGames;
         private var _game :GameController;
+        private var _questionPanel :QuestionPanel;
 
         public function SampleGameMain ()
         {
@@ -49,6 +49,7 @@ package
                 "pool_key": "COMPLETE",
                 "log_func": log
             });
+            _questionPanel = new QuestionPanel (_mathgames);
         }
 
         private function mathgames_error (e:MathGamesEvent) :void
@@ -81,38 +82,33 @@ package
 
         private function newSession () :void
         {
-            var config:Object = {};
+            this.customQuestions.visible = true;
 
-            if (USE_CUSTOM_QUESTION_AREA)
-            {
-                this.customQuestions.visible = true;
+            var qpConfig :Object = {
+                "question_area": this.customQuestions.questionArea,
+                "answer_buttons": []
+            };
 
-                config["question_panel"] = {
-                    "question_area": this.customQuestions.questionArea,
-                    "answer_buttons": []
-                }
+            var answerBtns :Vector.<MovieClip> = new <MovieClip> [
+                this.customQuestions.answer0,
+                this.customQuestions.answer1,
+                this.customQuestions.answer2,
+                this.customQuestions.answer3
+            ];
 
-                var answerBtns :Vector.<MovieClip> = new <MovieClip> [
-                    this.customQuestions.answer0,
-                    this.customQuestions.answer1,
-                    this.customQuestions.answer2,
-                    this.customQuestions.answer3
-                ];
+            for each (var answerBtn:MovieClip in answerBtns) {
+                answerBtn.buttonMode = true;
+                answerBtn.mouseChildren = false;
 
-                for each (var answerBtn:MovieClip in answerBtns)
-                {
-                    answerBtn.buttonMode = true;
-                    answerBtn.mouseChildren = false;
-
-                    config["question_panel"]["answer_buttons"].push ({
-                        "bounds": answerBtn.answerArea,
-                        "click_target": answerBtn,
-                        "visibility_target": answerBtn
-                    })
-                }
+                qpConfig["answer_buttons"].push ({
+                    "bounds": answerBtn.answerArea,
+                    "click_target": answerBtn,
+                    "visibility_target": answerBtn
+                })
             }
 
-            _mathgames.startSession (config);
+            _mathgames.startSession ({});
+            _questionPanel.configure (qpConfig);
         }
 
         private function mathgames_sessionReady (e:MathGamesEvent):void
@@ -132,11 +128,12 @@ package
 
         private function mathgames_progressOpened (e:MathGamesEvent) :void
         {
-
+            log (">> Progress panel opened.");
         }
 
         private function mathgames_progressClosed (e:MathGamesEvent) :void
         {
+            log (">> Progress panel closed. Starting new play session");
             newSession ();
         }
     }
