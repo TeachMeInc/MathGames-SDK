@@ -15,14 +15,33 @@ package com.mathgames.api.local.qpanel
         static private const ANSWER_BUTTON_COUNT :int = 4;
 
         private var _questionRenderTarget :ScaledRenderTarget;
-        private var _answerRenderTargets :Vector.<ScaledRenderTarget> = new Vector.<ScaledRenderTarget>;
-        private var _answerClickTargets :Vector.<DisplayObject> = new Vector.<DisplayObject>;
-        private var _answerVisibilityTargets :Vector.<DisplayObject> = new Vector.<DisplayObject>;
+        private var _answerRenderTargets :Vector.<ScaledRenderTarget>;
+        private var _answerClickTargets :Vector.<DisplayObject>;
+        private var _answerVisibilityTargets :Vector.<DisplayObject>;
 
-        private var _activeQuestion :Question;
+        private var _api :IMathGames = null;
+        private var _activeQuestion :Question = null;
+        private var _configured :Boolean = false;
 
-        public function QuestionPanel (api:IMathGames, config:Object)
+        public function QuestionPanel (api:IMathGames)
         {
+            _api = api;
+        }
+
+        static private function parseColor (color:*) :ColorTransform
+        {
+            if (color === undefined || color === null || !(color is uint)) return null;
+            return Images.offsetColorTransform (color);
+        }
+
+        public function configure (config:Object) :void
+        {
+            if (_configured) dispose ();
+
+            _answerRenderTargets = new Vector.<ScaledRenderTarget>;
+            _answerClickTargets = new Vector.<DisplayObject>;
+            _answerVisibilityTargets = new Vector.<DisplayObject>;
+
             var filters :Array = [];
 
             if (config["question_border"] !== undefined) {
@@ -42,12 +61,8 @@ package com.mathgames.api.local.qpanel
             }
 
             _listeners.add (api, MathGamesEvent.QUESTION_READY, api_questionReady);
-        }
 
-        static private function parseColor (color:*) :ColorTransform
-        {
-            if (color === undefined || color === null || !(color is uint)) return null;
-            return Images.offsetColorTransform (color);
+            _configured = true;
         }
 
         public function dispose () :void
@@ -60,6 +75,7 @@ package com.mathgames.api.local.qpanel
 
             _listeners.removeAll ();
             _activeQuestion = null;
+            _configured = false;
         }
 
         private function api_questionReady (e:MathGamesEvent) :void
