@@ -38,7 +38,6 @@ package
             _mathgames.addEventListener (MathGamesEvent.AUTH_CANCELLED, mathgames_authCancel);
             _mathgames.addEventListener (MathGamesEvent.AUTHENTICATED, mathgames_authComplete);
             _mathgames.addEventListener (MathGamesEvent.SESSION_READY, mathgames_sessionReady);
-            _mathgames.addEventListener (MathGamesEvent.QUESTION_ANSWERED, mathgames_questionAnswered);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_OPENED, mathgames_progressOpened);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_CLOSED, mathgames_progressClosed);
 
@@ -50,6 +49,9 @@ package
                 "log_func": log
             });
             _questionPanel = new QuestionPanel (_mathgames);
+
+			_questionPanel.addEventListener (QuestionPanel.EVENT_ANSWER_CORRECT, question_answerCorrect);
+            _questionPanel.addEventListener (QuestionPanel.EVENT_ANSWER_INCORRECT, question_answerIncorrect);
         }
 
         private function mathgames_error (e:MathGamesEvent) :void
@@ -116,11 +118,12 @@ package
             _game.start ();
         }
 
-        private function mathgames_questionAnswered (e:MathGamesEvent) :void
-        {
-            var answer:AnswerData = e.data as AnswerData;
+        private function question_answerCorrect   (e:Event) :void { answer (true); }
+        private function question_answerIncorrect (e:Event) :void { answer (false); }
 
-            if (!_game.answerQuestion (answer.correct)) {
+        private function answer (correct:Boolean) :void
+        {
+            if (!_game.answerQuestion (correct)) {
                 _game.stop ();
                 _mathgames.showProgress ();
             }
