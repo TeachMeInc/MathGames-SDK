@@ -323,6 +323,10 @@
         <swc-path>../remote/lib</swc-path>
         <linkage>merge</linkage>
       </library-path-entry>
+      <library-path-entry>
+        <swc-path>../remote-art</swc-path>
+        <linkage>merge</linkage>
+      </library-path-entry>
     </LibraryPath>
     <LibraryVersions>
       <library-version>
