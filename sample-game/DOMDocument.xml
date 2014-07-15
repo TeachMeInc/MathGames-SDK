@@ -318,6 +318,11 @@
      </swatchLists>
      <PrinterSettings/>
      <publishHistory>
+          <PublishItem publishSize="1642" publishTime="1405449038"/>
+          <PublishItem publishSize="1641" publishTime="1405373951"/>
+          <PublishItem publishSize="1641" publishTime="1405373937"/>
+          <PublishItem publishSize="1641" publishTime="1405373924"/>
+          <PublishItem publishSize="1640" publishTime="1405373856"/>
           <PublishItem publishSize="1638" publishTime="1404936918"/>
           <PublishItem publishSize="412856" publishTime="1400124869" publishDebug="true"/>
           <PublishItem publishSize="412917" publishTime="1400124837" publishDebug="true"/>
@@ -333,10 +338,5 @@
           <PublishItem publishSize="1636" publishTime="1399395614"/>
           <PublishItem publishSize="1631" publishTime="1399395230"/>
           <PublishItem publishSize="1631" publishTime="1399394808"/>
-          <PublishItem publishSize="1631" publishTime="1399394757"/>
-          <PublishItem publishSize="137095" publishTime="1393548763"/>
-          <PublishItem publishSize="5610" publishTime="1393548728"/>
-          <PublishItem publishSize="5609" publishTime="1393548712"/>
-          <PublishItem publishSize="5654" publishTime="1393548679"/>
      </publishHistory>
 </DOMDocument>

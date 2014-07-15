@@ -116,17 +116,8 @@
 
         public function startSession (config:Object) :void
         {
-            // If we're passing in the question panel objects, then added parent references here
-            //  to avoid security sandbox violations which occur when trying to access "parent" remotely.
-            if (config["question_panel"] !== undefined) {
-                config["question_panel"]["question_area_parent"] = config["question_panel"]["question_area"].parent;
-                for each (var btn:Object in config["question_panel"]["answer_buttons"]) {
-                    btn["bounds_parent"] = btn["bounds"].parent;
-                }
-            }
-
-            config["answer_callback"] = answerCallback;
-
+            config ["question_ready_callback"] = questionReadyCallback;
+            config ["average_time_change_callback"] = averageTimeChangeCallback;
             _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
         }
 
@@ -153,15 +144,25 @@
             dispatchEvent (new MathGamesEvent (MathGamesEvent.PROGRESS_OPENED));
         }
 
+        private function questionReadyCallback (params:Object) :void
+        {
+            var question :Question = new Question;
+            question.question = params["question"];
+            question.answers = Vector.<BitmapData>(params["answers"]);
+            question.correctIndex = params["correctIndex"];
+            question.doAnswer = params["doAnswer"];
+
+            dispatchEvent (new MathGamesEvent (MathGamesEvent.QUESTION_READY, question));
+        }
+
+        private function averageTimeChangeCallback (time:int) :void
+        {
+            dispatchEvent (new MathGamesEvent (MathGamesEvent.AVERAGE_TIME_CHANGE, time));
+        }
+
         private function logoutCallback () :void
         {
             dispatchEvent (new MathGamesEvent (MathGamesEvent.LOGOUT));
-        }
-
-        private function answerCallback (data:Object) :void
-        {
-            dispatchEvent (new MathGamesEvent (MathGamesEvent.QUESTION_ANSWERED,
-                new AnswerData (data["correct"], data["clickTarget"], data["averageAnswerTime"])));
         }
 
     // ----- Misc ---------------------------------------------------------------------------------

@@ -1,19 +1,20 @@
 package
 {
     import com.mathgames.api.local.*;
+    import com.mathgames.api.local.qpanel.*;
     import flash.display.*;
     import flash.events.*;
 
     public class SampleGameMain extends MovieClip
     {
-        static private const USE_CUSTOM_QUESTION_AREA :Boolean = false;
-
         private var _mathgames :IMathGames;
         private var _game :GameController;
+        private var _questionPanel :QuestionPanel;
 
         public function SampleGameMain ()
         {
             _mathgames = MathGames.instance;
+            _questionPanel = new QuestionPanel (_mathgames);
 
             this.customQuestions.visible = false;
 
@@ -38,9 +39,9 @@ package
             _mathgames.addEventListener (MathGamesEvent.AUTH_CANCELLED, mathgames_authCancel);
             _mathgames.addEventListener (MathGamesEvent.AUTHENTICATED, mathgames_authComplete);
             _mathgames.addEventListener (MathGamesEvent.SESSION_READY, mathgames_sessionReady);
-            _mathgames.addEventListener (MathGamesEvent.QUESTION_ANSWERED, mathgames_questionAnswered);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_OPENED, mathgames_progressOpened);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_CLOSED, mathgames_progressClosed);
+            _questionPanel.addEventListener (QuestionPanelEvent.ANSWER, question_answer);
 
             _game = new GameController (this.ball);
 
@@ -81,38 +82,33 @@ package
 
         private function newSession () :void
         {
-            var config:Object = {};
+            this.customQuestions.visible = true;
 
-            if (USE_CUSTOM_QUESTION_AREA)
-            {
-                this.customQuestions.visible = true;
+            var qpConfig :Object = {
+                "question_area": this.customQuestions.questionArea,
+                "answer_buttons": []
+            };
 
-                config["question_panel"] = {
-                    "question_area": this.customQuestions.questionArea,
-                    "answer_buttons": []
-                }
+            var answerBtns :Vector.<MovieClip> = new <MovieClip> [
+                this.customQuestions.answer0,
+                this.customQuestions.answer1,
+                this.customQuestions.answer2,
+                this.customQuestions.answer3
+            ];
 
-                var answerBtns :Vector.<MovieClip> = new <MovieClip> [
-                    this.customQuestions.answer0,
-                    this.customQuestions.answer1,
-                    this.customQuestions.answer2,
-                    this.customQuestions.answer3
-                ];
+            for each (var answerBtn:MovieClip in answerBtns) {
+                answerBtn.buttonMode = true;
+                answerBtn.mouseChildren = false;
 
-                for each (var answerBtn:MovieClip in answerBtns)
-                {
-                    answerBtn.buttonMode = true;
-                    answerBtn.mouseChildren = false;
-
-                    config["question_panel"]["answer_buttons"].push ({
-                        "bounds": answerBtn.answerArea,
-                        "click_target": answerBtn,
-                        "visibility_target": answerBtn
-                    })
-                }
+                qpConfig["answer_buttons"].push ({
+                    "bounds": answerBtn.answerArea,
+                    "click_target": answerBtn,
+                    "visibility_target": answerBtn
+                })
             }
 
-            _mathgames.startSession (config);
+            _mathgames.startSession ({});
+            _questionPanel.configure (qpConfig);
         }
 
         private function mathgames_sessionReady (e:MathGamesEvent):void
@@ -120,11 +116,9 @@ package
             _game.start ();
         }
 
-        private function mathgames_questionAnswered (e:MathGamesEvent) :void
+        private function question_answer (e:QuestionPanelEvent) :void
         {
-            var answer:AnswerData = e.data as AnswerData;
-
-            if (!_game.answerQuestion (answer.correct)) {
+            if (!_game.answerQuestion (e.correct)) {
                 _game.stop ();
                 _mathgames.showProgress ();
             }
@@ -132,17 +126,16 @@ package
 
         private function mathgames_progressOpened (e:MathGamesEvent) :void
         {
-
+            log (">> Progress panel opened.");
         }
 
         private function mathgames_progressClosed (e:MathGamesEvent) :void
         {
+            log (">> Progress panel closed. Starting new play session");
             newSession ();
         }
     }
 }
-
-
 
 import flash.display.*;
 import flash.events.*;
@@ -187,14 +180,12 @@ class GameController
 }
 
 
-
-
-
-
-
-
-
-
+// The following block is used internally by TeachMe Inc for debugging.
+// You can safely ignore it.
+CONFIG::DEV {
+import com.mathgames.api.remote.SWFMain;
+class __forceApiImport extends SWFMain {}
+}
 
 
 
