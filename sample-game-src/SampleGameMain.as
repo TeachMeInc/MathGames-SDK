@@ -14,6 +14,7 @@ package
         public function SampleGameMain ()
         {
             _mathgames = MathGames.instance;
+            _questionPanel = new QuestionPanel (_mathgames);
 
             this.customQuestions.visible = false;
 
@@ -40,6 +41,7 @@ package
             _mathgames.addEventListener (MathGamesEvent.SESSION_READY, mathgames_sessionReady);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_OPENED, mathgames_progressOpened);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_CLOSED, mathgames_progressClosed);
+            _questionPanel.addEventListener (QuestionPanelEvent.ANSWER, question_answer);
 
             _game = new GameController (this.ball);
 
@@ -48,10 +50,6 @@ package
                 "pool_key": "COMPLETE",
                 "log_func": log
             });
-            _questionPanel = new QuestionPanel (_mathgames);
-
-			_questionPanel.addEventListener (QuestionPanel.EVENT_ANSWER_CORRECT, question_answerCorrect);
-            _questionPanel.addEventListener (QuestionPanel.EVENT_ANSWER_INCORRECT, question_answerIncorrect);
         }
 
         private function mathgames_error (e:MathGamesEvent) :void
@@ -118,12 +116,9 @@ package
             _game.start ();
         }
 
-        private function question_answerCorrect   (e:Event) :void { answer (true); }
-        private function question_answerIncorrect (e:Event) :void { answer (false); }
-
-        private function answer (correct:Boolean) :void
+        private function question_answer (e:QuestionPanelEvent) :void
         {
-            if (!_game.answerQuestion (correct)) {
+            if (!_game.answerQuestion (e.correct)) {
                 _game.stop ();
                 _mathgames.showProgress ();
             }

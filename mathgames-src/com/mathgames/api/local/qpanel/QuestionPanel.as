@@ -9,9 +9,6 @@ package com.mathgames.api.local.qpanel
 
     final public class QuestionPanel extends EventDispatcher
     {
-        static public const EVENT_ANSWER_CORRECT :String = "qp-ans-correct";
-        static public const EVENT_ANSWER_INCORRECT :String = "qp-ans-incorrect";
-
         static private const ANSWER_BUTTON_COUNT :int = 4;
 
         private var _questionRenderTarget :ScaledRenderTarget;
@@ -132,7 +129,7 @@ package com.mathgames.api.local.qpanel
             _activeQuestion = null;
             answerFunc (choiceIndex);
 
-            dispatchEvent (new Event (correct ? EVENT_ANSWER_CORRECT : EVENT_ANSWER_INCORRECT));
+            dispatchEvent (new QuestionPanelEvent (QuestionPanelEvent.ANSWER, _answerClickTargets[choiceIndex], correct));
         }
     }
 }
