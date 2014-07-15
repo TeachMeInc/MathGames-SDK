@@ -148,7 +148,7 @@
         {
             var question :Question = new Question;
             question.question = params["question"];
-            question.answers = params["answers"];
+            question.answers = Vector.<BitmapData>(params["answers"]);
             question.correctIndex = params["correctIndex"];
             question.doAnswer = params["doAnswer"];
 

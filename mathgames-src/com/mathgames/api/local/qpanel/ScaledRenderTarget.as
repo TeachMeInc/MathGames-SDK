@@ -32,10 +32,10 @@ package com.mathgames.api.local.qpanel
             _enabled = true;
         }
 
-        public function getScaleRatio (displayObject:DisplayObject) :Number
+        public function getScaleRatio (bmpData:BitmapData) :Number
         {
-            var xRatio :Number = _boundsWidth  / displayObject.width;
-            var yRatio :Number = _boundsHeight / displayObject.height;
+            var xRatio :Number = _boundsWidth  / bmpData.width;
+            var yRatio :Number = _boundsHeight / bmpData.height;
             return Math.min (xRatio, yRatio);
         }
 
@@ -62,7 +62,7 @@ package com.mathgames.api.local.qpanel
 
             var scaleRatio :Number = forceRatio > 0
                                    ? forceRatio
-                                   : getScaleRatio (displayObject);
+                                   : getScaleRatio (bitmapData);
 
             _child.scaleX = scaleRatio;
             _child.scaleY = scaleRatio;
@@ -74,7 +74,7 @@ package com.mathgames.api.local.qpanel
         static private function renderBitmapData (bmpData:BitmapData) :DisplayObject
         {
             var spr :Sprite = new Sprite;
-            var bitmap :Bitmap = new Bitmap (bitmapData, "auto", true);
+            var bitmap :Bitmap = new Bitmap (bmpData, "auto", true);
 
             spr.addChild (bitmap);
             bitmap.x = -bitmap.width / 2;

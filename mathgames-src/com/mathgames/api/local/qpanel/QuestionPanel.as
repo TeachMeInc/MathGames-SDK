@@ -19,6 +19,8 @@ package com.mathgames.api.local.qpanel
         private var _answerClickTargets :Vector.<DisplayObject>;
         private var _answerVisibilityTargets :Vector.<DisplayObject>;
 
+        private var _listeners :ListenerCollection = new ListenerCollection;
+
         private var _api :IMathGames = null;
         private var _activeQuestion :Question = null;
         private var _configured :Boolean = false;
@@ -31,7 +33,13 @@ package com.mathgames.api.local.qpanel
         static private function parseColor (color:*) :ColorTransform
         {
             if (color === undefined || color === null || !(color is uint)) return null;
-            return Images.offsetColorTransform (color);
+
+            var colorU :uint = color as uint;
+
+            var r :int = (colorU & 0xFF0000) >> 16;
+            var g :int = (colorU & 0x00FF00) >> 8;
+            var b :int = (colorU & 0x0000FF);
+            return new ColorTransform (1, 1, 1, 1, r, g, b, 0);
         }
 
         public function configure (config:Object) :void
@@ -60,7 +68,7 @@ package com.mathgames.api.local.qpanel
                 _answerVisibilityTargets.push (button["visibility_target"]);
             }
 
-            _listeners.add (api, MathGamesEvent.QUESTION_READY, api_questionReady);
+            _listeners.add (_api, MathGamesEvent.QUESTION_READY, api_questionReady);
 
             _configured = true;
         }
