@@ -199,8 +199,8 @@ class RemoteSWF
         [Event.OPEN,                        swfLoader_generalLog],
         [ProgressEvent.PROGRESS,            swfLoader_generalLog],
         [Event.UNLOAD,                      swfLoader_generalLog],
-        [IOErrorEvent.IO_ERROR,             swfLoader_generalError],
-        [SecurityErrorEvent.SECURITY_ERROR, swfLoader_generalError],
+        [IOErrorEvent.IO_ERROR,             swfLoader_ioError],
+        [SecurityErrorEvent.SECURITY_ERROR, swfLoader_secError],
         [Event.COMPLETE,                    swfLoader_success]
     ];
 
@@ -263,10 +263,16 @@ class RemoteSWF
         _log ("Connection event: " + e.type);
     }
 
-    private function swfLoader_generalError (e:Event) :void
+    private function swfLoader_ioError (e:IOErrorEvent) :void
     {
         swfLoader_removeListeners ();
-        _swfLoadCallback (e.type);
+        _swfLoadCallback (e.text);
+    }
+
+    private function swfLoader_secError (e:SecurityErrorEvent) :void
+    {
+        swfLoader_removeListeners ();
+        _swfLoadCallback (e.text);
     }
 
     private function swfLoader_success (e:Event) :void
