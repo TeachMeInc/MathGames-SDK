@@ -116,9 +116,10 @@
 
         public function startSession (config:Object) :void
         {
-            config ["question_ready_callback"] = questionReadyCallback;
-            config ["average_time_change_callback"] = averageTimeChangeCallback;
-            _remote.startSession (config, dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY));
+            _remote.startSession (config,
+                dispatchErrorOrSuccess (MathGamesEvent.SESSION_READY),
+                questionReadyCallback,
+                averageTimeChangeCallback);
         }
 
         public function endSession () :void
@@ -326,11 +327,15 @@ class RemoteSWF
         _swfContent.invokeFunction ("showSupportedSkillStandards");
     }
 
-    public function startSession (config:Object, callback:Function) :void {
+    public function startSession (config:Object, sessionReadyCallback:Function,
+        questionReadyCallback:Function, averageTimeChangeCallback:Function) :void
+    {
         ifNotLoadedThrowError ();
         _swfContent.invokeFunction ("startSession", {
             "config": config,
-            "callback": callback
+            "sessionReadyCallback": sessionReadyCallback,
+            "questionReadyCallback": questionReadyCallback,
+            "averageTimeChangeCallback": averageTimeChangeCallback
         });
     }
 
