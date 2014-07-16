@@ -24,8 +24,11 @@ is ready to start receiving question data.  The ``data`` variable is null for th
 ##### ``MathGamesEvent.SESSION_READY``
 This event is fired after ``MathGames.instance.startSession`` is invoked, once the questions are ready and gameplay can begin. The ``data`` variable is null for this event.
 
-##### ``MathGamesEvent.QUESTION_ANSWERED``
-This event is fired whenever the player answers a question during a gameplay session.  The ``data`` variable has type ``com.mathgames.api.local.AnswerData`` and contains information about the recently answered question, including whether the answer was correct or not.
+##### ``MathGamesEvent.QUESTION_READY``
+This event is fired during a play session when a question is ready to be displayed to the player.  It will generally happen immediately after a SESSION_READY event, or after invoking the question answer continuation/callback provided by the previous question.  The ``data`` variable has type ``com.mathgames.api.local.Question`` and contains the BitmapData required to render the question and answers.  It also provides a the index of the correct answer, as well as a callback to invoke when the player has selected an answer.
+
+##### ``MathGamesEvent.AVERAGE_TIME_CHANGE``
+This event is fired whenever the average time per question changes.  This happens usually when the type of question presented by the SDK changes.  The ``data`` variable has type ``int`` and represents the number of milliseconds the average player will take to answer the questions in the current set.
 
 ##### ``MathGamesEvent.PROGRESS_OPENED``
 This event is fired after ``MathGames.instance.showProgress`` is invoked, once the panel has actually been displayed to the player. The ``data`` variable is null for this event.
