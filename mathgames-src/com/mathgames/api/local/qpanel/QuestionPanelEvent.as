@@ -3,7 +3,7 @@ package com.mathgames.api.local.qpanel
     import flash.display.*;
     import flash.events.*;
 
-    public class QuestionPanelEvent extends Event
+    final public class QuestionPanelEvent extends Event
     {
         static public const ANSWER :String = "qp-answer";
 

@@ -2,7 +2,7 @@ package com.mathgames.api.local
 {
     import flash.display.*;
 
-    public class Question
+    final public class Question
     {
         public var question :BitmapData;
         public var answers :Vector.<BitmapData>;

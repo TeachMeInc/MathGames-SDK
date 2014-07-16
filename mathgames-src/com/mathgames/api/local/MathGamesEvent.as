@@ -2,7 +2,7 @@ package com.mathgames.api.local
 {
     import flash.events.*;
 
-    public class MathGamesEvent extends Event
+    final public class MathGamesEvent extends Event
     {
         static public const ERROR :String = "mg-error";
         static public const CONNECTED :String = "mg-connected";

@@ -2,7 +2,7 @@ package com.mathgames.api.local.qpanel
 {
     import flash.events.*;
 
-    final public class ListenerCollection
+    final internal class ListenerCollection
     {
         private var _listeners :Vector.<SingleListener>;
 
