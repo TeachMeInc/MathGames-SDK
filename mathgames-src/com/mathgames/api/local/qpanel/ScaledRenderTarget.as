@@ -3,7 +3,7 @@ package com.mathgames.api.local.qpanel
     import flash.display.*;
     import flash.geom.*;
 
-    final internal class ScaledRenderTarget
+    final public class ScaledRenderTarget
     {
         private var _boundsWidth :Number;
         private var _boundsHeight :Number;
