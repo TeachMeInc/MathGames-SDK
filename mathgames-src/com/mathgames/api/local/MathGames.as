@@ -94,9 +94,9 @@
 
                 _remote.initialize (config);
 
-                _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight);
+                _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
                 _stage.addEventListener (Event.RESIZE, function (e:Event) :void {
-                    _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight);
+                    _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
                 });
 
                 dispatchEvent (new MathGamesEvent (MathGamesEvent.CONNECTED));
@@ -315,11 +315,13 @@ class RemoteSWF
         });
     }
 
-    public function notifyStageResize (width:Number, height:Number) :void {
+    public function notifyStageResize (width:Number, height:Number, scaleX:Number, scaleY:Number) :void {
         ifNotLoadedThrowError ();
         _swfContent.invokeFunction ("notifyStageResize", {
             "width": width,
-            "height": height
+            "height": height,
+            "scaleX": scaleX,
+            "scaleY": scaleY
         });
     }
 
