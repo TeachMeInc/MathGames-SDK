@@ -16,6 +16,8 @@ package com.mathgames.api.local.qpanel
         private var _child :DisplayObject;
         private var _enabled :Boolean;
 
+        public function get child () :DisplayObject { return _child; }
+
         public function ScaledRenderTarget (bounds:DisplayObject, color:ColorTransform = null, filters:Array = null)
         {
             _boundsWidth = bounds.width;
