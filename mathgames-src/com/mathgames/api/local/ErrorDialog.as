@@ -2,8 +2,9 @@ package com.mathgames.api.local
 {
     import flash.display.*;
     import flash.events.*;
+    import flash.text.*;
 
-    public class ErrorDialog extends Sprite
+    final internal class ErrorDialog extends Sprite
     {
         static private const DIALOG_WIDTH   :Number = 360;
         static private const DIALOG_HEIGHT  :Number = 106;
@@ -14,6 +15,8 @@ package com.mathgames.api.local
         static private const BUTTON_TEXT_Y  :Number =   8;
 
         // Dispatches Event.CLOSE when dismissed.
+
+        private var _button :SimpleButton;
 
         public function ErrorDialog ()
         {
@@ -38,16 +41,16 @@ package com.mathgames.api.local
             txt.setTextFormat(fmt);
             this.addChild(txt);
 
-            var btn:SimpleButton = button("Try Again");
-            btn.y = -DIALOG_HEIGHT/2 + BUTTON_TOP;
-            this.addChild(btn);
+            _button = button("Try Again");
+            _button.y = -DIALOG_HEIGHT/2 + BUTTON_TOP;
+            this.addChild(_button);
 
-            btn.addEventListener (MouseEvent.CLICK, tryAgain_click);
+            _button.addEventListener (MouseEvent.CLICK, tryAgain_click);
         }
 
         private function tryAgain_click (e:MouseEvent) :void
         {
-            btn.removeEventListener (MouseEvent.CLICK, tryAgain_click);
+            _button.removeEventListener (MouseEvent.CLICK, tryAgain_click);
             dispatchEvent (new Event (Event.CLOSE));
         }
 
