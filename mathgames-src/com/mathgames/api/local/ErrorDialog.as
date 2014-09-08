@@ -2,10 +2,15 @@ package com.mathgames.api.local
 {
     import flash.display.*;
     import flash.events.*;
+    import flash.net.*;
     import flash.text.*;
 
     final internal class ErrorDialog extends Sprite
     {
+        static private const ERR_TRACK_URL :String =
+            "https://analytics.mathgames.com/piwik.php?apiv=1&rec=1&idsite=1&_id=1234567898765432&"+
+            "url=www.mathgames.com&e_c=api-events&e_a=api-load-error&rand=";
+
         static private const DIALOG_WIDTH   :Number = 360;
         static private const DIALOG_HEIGHT  :Number = 106;
         static private const DIALOG_PADDING :Number =  10;
@@ -45,6 +50,8 @@ package com.mathgames.api.local
             _button.y = -DIALOG_HEIGHT/2 + BUTTON_TOP;
             this.addChild(_button);
 
+            trackError ();
+
             _button.addEventListener (MouseEvent.CLICK, tryAgain_click);
         }
 
@@ -52,6 +59,22 @@ package com.mathgames.api.local
         {
             _button.removeEventListener (MouseEvent.CLICK, tryAgain_click);
             dispatchEvent (new Event (Event.CLOSE));
+        }
+
+        static private function trackError () :void
+        {
+            var rand :String = Math.random().toString().substr(2);
+            var request :URLRequest = new URLRequest (ERR_TRACK_URL + rand);
+            request.method = URLRequestMethod.GET;
+
+            var loader :URLLoader = new URLLoader();
+
+            loader.addEventListener (Event.COMPLETE, loadComplete);
+            function loadComplete (e:Event) :void {
+                loader.removeEventListener (Event.COMPLETE, loadComplete);
+            }
+
+            loader.load (request);
         }
 
         static private function button (label:String) :SimpleButton
