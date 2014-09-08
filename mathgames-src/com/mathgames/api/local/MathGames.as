@@ -291,24 +291,25 @@ class RemoteSWF
         _swfLoadCallback (err);
     }
 
-    private function ifNotLoadedThrowError () :void
+    private function checkLoadedAndLog () :Boolean
     {
         if (!loaded) {
-            throw new Error ("Attempting to invoke remote API calls, but SWF is not loaded");
+            _log ("Attempting to invoke remote API calls, but SWF is not loaded");
         }
+        return loaded;
     }
 
 // ---- Implementation of remote SWF function call proxies ----------------------------------------
 
     public function initialize (config:Object) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("initialize", {
             "config": config
         });
     }
 
     public function showAuthPanel (callback:Function, cancelCallback:Function) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("showAuthPanel", {
             "callback": callback,
             "cancelCallback": cancelCallback
@@ -316,7 +317,7 @@ class RemoteSWF
     }
 
     public function notifyStageResize (width:Number, height:Number, scaleX:Number, scaleY:Number) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("notifyStageResize", {
             "width": width,
             "height": height,
@@ -326,14 +327,14 @@ class RemoteSWF
     }
 
     public function showSupportedSkillStandards () :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("showSupportedSkillStandards");
     }
 
     public function startSession (config:Object, sessionReadyCallback:Function,
         questionReadyCallback:Function, averageTimeChangeCallback:Function) :void
     {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("startSession", {
             "config": config,
             "sessionReadyCallback": sessionReadyCallback,
@@ -343,12 +344,12 @@ class RemoteSWF
     }
 
     public function endSession () :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("endSession");
     }
 
     public function postMetrics (key:String, data:Object) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("postMetrics", {
             "key": key,
             "data": data
@@ -356,14 +357,14 @@ class RemoteSWF
     }
 
     public function setSoundEnabled (enabled:Boolean) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("setSoundEnabled", {
             "enabled": enabled
         });
     }
 
     public function showProgress (callback:Function, readyCallback:Function, logoutCallback:Function) :void {
-        ifNotLoadedThrowError ();
+        if (! checkLoadedAndLog ()) return;
         _swfContent.invokeFunction ("showProgress", {
             "callback": callback,
             "readyCallback": readyCallback,
