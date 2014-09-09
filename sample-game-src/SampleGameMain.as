@@ -31,7 +31,7 @@ package
             apiHolder.y = stage.stageHeight / 2;
             addChild (apiHolder);
 
-            log (">> Loading MathGames remote resources SWF...");
+            trace (">> Loading MathGames remote resources SWF...");
 
             _mathgames.addEventListener (MathGamesEvent.CONNECTED, mathgames_connected);
             _mathgames.addEventListener (MathGamesEvent.LOGOUT, mathgames_logout);
@@ -48,35 +48,35 @@ package
             _mathgames.connect (apiHolder, {
                 "api_key": "528e1abeb4967cb32b00028e",
                 "pool_key": "COMPLETE",
-                "log_func": log
+                "log_func": trace
             });
         }
 
         private function mathgames_error (e:MathGamesEvent) :void
         {
-            log (">> Error occurred:");
-            log (e.data as String);
+            trace (">> Error occurred:");
+            trace (e.data as String);
         }
 
         private function mathgames_logout (e:MathGamesEvent) :void
         {
-            log (">> Logged out.");
+            trace (">> Logged out.");
         }
 
         private function mathgames_connected (e:MathGamesEvent) :void
         {
-            log (">> mathgames_connected");
+            trace (">> mathgames_connected");
             _mathgames.authenticate ();
         }
 
         private function mathgames_authCancel (e:MathGamesEvent) :void
         {
-            log (">> Auth cancelled.");
+            trace (">> Auth cancelled.");
         }
 
         private function mathgames_authComplete (e:MathGamesEvent) :void
         {
-            log (">> mathgames_authComplete");
+            trace (">> mathgames_authComplete");
             newSession ();
         }
 
@@ -126,12 +126,12 @@ package
 
         private function mathgames_progressOpened (e:MathGamesEvent) :void
         {
-            log (">> Progress panel opened.");
+            trace (">> Progress panel opened.");
         }
 
         private function mathgames_progressClosed (e:MathGamesEvent) :void
         {
-            log (">> Progress panel closed. Starting new play session");
+            trace (">> Progress panel closed. Starting new play session");
             newSession ();
         }
     }
@@ -139,14 +139,6 @@ package
 
 import flash.display.*;
 import flash.events.*;
-import flash.external.*;
-
-function log (msg:String) :void {
-    trace (msg);
-    if (ExternalInterface.available) {
-        ExternalInterface.call ("console.log", msg);
-    }
-}
 
 class GameController
 {
