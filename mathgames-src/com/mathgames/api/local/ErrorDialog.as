@@ -69,10 +69,14 @@ package com.mathgames.api.local
 
             var loader :URLLoader = new URLLoader();
 
-            loader.addEventListener (Event.COMPLETE, loadComplete);
-            function loadComplete (e:Event) :void {
-                loader.removeEventListener (Event.COMPLETE, loadComplete);
+            function removeListeners (e:Event) :void {
+                loader.removeEventListener (Event.COMPLETE, removeListeners);
+                loader.removeEventListener (IOErrorEvent.IO_ERROR, removeListeners);
+                loader.removeEventListener (SecurityErrorEvent.SECURITY_ERROR, removeListeners);
             }
+            loader.addEventListener (Event.COMPLETE, removeListeners);
+            loader.addEventListener (IOErrorEvent.IO_ERROR, removeListeners);
+            loader.addEventListener (SecurityErrorEvent.SECURITY_ERROR, removeListeners);
 
             loader.load (request);
         }
