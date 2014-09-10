@@ -57,7 +57,10 @@ package com.mathgames.api.local
                 _swfLoader = new Loader;
                 swfLoader_addListeners ();
                 if (BUST_CACHE) swfUrl += "?_=" + Math.random().toString().substr(2);
-                _swfLoader.load (new URLRequest (swfUrl));
+
+                var req:URLRequest = new URLRequest (swfUrl);
+                req.method = URLRequestMethod.GET;
+                _swfLoader.load (req);
             }
         }
 
