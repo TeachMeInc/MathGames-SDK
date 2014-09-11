@@ -12,16 +12,15 @@ package com.mathgames.api.local
     {
         function connect (container:DisplayObjectContainer, config:Object) :void;
 
-        function authenticate () :void;
-
-        function showSupportedSkillStandards () :void;
+        function selectSkill () :void;
 
         function startSession (config:Object) :void;
         function endSession () :void;
 
-        function postMetrics (key:String, data:Object) :void;
+        function showSupportedSkillStandards () :void;
         function showProgress () :void;
 
+        function postMetrics (key:String, data:Object) :void;
         function setSoundEnabled (enabled:Boolean) :void;
     }
 }

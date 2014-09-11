@@ -126,11 +126,12 @@ package com.mathgames.api.local
             });
         }
 
-        public function showAuthPanel (callback:Function, cancelCallback:Function) :void {
+        public function selectSkill (success:Function, cancel:Function, error:Function) :void {
             if (! checkLoadedAndLog ()) return;
-            _swfContent.invokeFunction ("showAuthPanel", {
-                "callback": callback,
-                "cancelCallback": cancelCallback
+            _swfContent.invokeFunction ("selectSkill", {
+                "success": success,
+                "cancel": cancel,
+                "error": error
             });
         }
 
@@ -142,11 +143,6 @@ package com.mathgames.api.local
                 "scaleX": scaleX,
                 "scaleY": scaleY
             });
-        }
-
-        public function showSupportedSkillStandards () :void {
-            if (! checkLoadedAndLog ()) return;
-            _swfContent.invokeFunction ("showSupportedSkillStandards");
         }
 
         public function startSession (config:Object, sessionReadyCallback:Function,
@@ -166,6 +162,18 @@ package com.mathgames.api.local
             _swfContent.invokeFunction ("endSession");
         }
 
+        public function showSupportedSkillStandards () :void {
+            if (! checkLoadedAndLog ()) return;
+            _swfContent.invokeFunction ("showSupportedSkillStandards");
+        }
+
+        public function showProgress (closed:Function) :void {
+            if (! checkLoadedAndLog ()) return;
+            _swfContent.invokeFunction ("showProgress", {
+                "closed": closed
+            });
+        }
+
         public function postMetrics (key:String, data:Object) :void {
             if (! checkLoadedAndLog ()) return;
             _swfContent.invokeFunction ("postMetrics", {
@@ -173,20 +181,10 @@ package com.mathgames.api.local
                 "data": data
             });
         }
-
         public function setSoundEnabled (enabled:Boolean) :void {
             if (! checkLoadedAndLog ()) return;
             _swfContent.invokeFunction ("setSoundEnabled", {
                 "enabled": enabled
-            });
-        }
-
-        public function showProgress (callback:Function, readyCallback:Function, logoutCallback:Function) :void {
-            if (! checkLoadedAndLog ()) return;
-            _swfContent.invokeFunction ("showProgress", {
-                "callback": callback,
-                "readyCallback": readyCallback,
-                "logoutCallback": logoutCallback
             });
         }
     }

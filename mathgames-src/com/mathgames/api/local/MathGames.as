@@ -113,14 +113,16 @@
             });
         }
 
-        public function authenticate () :void
+        public function selectSkill () :void
         {
-            _remote.showAuthPanel (dispatchErrorOrSuccess (MathGamesEvent.AUTHENTICATED), authCancel);
-        }
-
-        private function authCancel () :void
-        {
-            dispatchEvent (new MathGamesEvent (MathGamesEvent.AUTH_CANCELLED));
+            _remote.selectSkill (
+                function():void {
+                    dispatchEvent (new MathGamesEvent (MathGamesEvent.SKILL_SELECTED));
+                }, function() :void {
+                    dispatchEvent (new MathGamesEvent (MathGamesEvent.SKILL_SELECT_CANCELLED));
+                },
+                dispatchError
+            );
         }
 
     // ----- Gameplay session management ----------------------------------------------------------
@@ -138,22 +140,16 @@
             _remote.endSession ();
         }
 
-        public function postMetrics (key:String, data:Object) :void
+        public function showSupportedSkillStandards () :void
         {
-            _remote.postMetrics (key, data);
+            _remote.showSupportedSkillStandards ();
         }
 
         public function showProgress () :void
         {
-            var successOrErrorCallback :Function =
-                dispatchErrorOrSuccess (MathGamesEvent.PROGRESS_CLOSED);
-
-            _remote.showProgress (successOrErrorCallback, progressReadyCallback, logoutCallback);
-        }
-
-        private function progressReadyCallback () :void
-        {
-            dispatchEvent (new MathGamesEvent (MathGamesEvent.PROGRESS_OPENED));
+            _remote.showProgress (function():void {
+                dispatchEvent (new MathGamesEvent (MathGamesEvent.PROGRESS_CLOSED));
+            });
         }
 
         private function questionReadyCallback (params:Object) :void
@@ -177,16 +173,14 @@
             dispatchEvent (new MathGamesEvent (MathGamesEvent.LOGOUT));
         }
 
-    // ----- Misc ---------------------------------------------------------------------------------
+        public function postMetrics (key:String, data:Object) :void
+        {
+            _remote.postMetrics (key, data);
+        }
 
         public function setSoundEnabled (enabled:Boolean) :void
         {
             _remote.setSoundEnabled (enabled);
-        }
-
-        public function showSupportedSkillStandards () :void
-        {
-            _remote.showSupportedSkillStandards ();
         }
 
     // --------------------------------------------------------------------------------------------
