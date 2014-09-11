@@ -168,10 +168,6 @@
             dispatchEvent (new MathGamesEvent (MathGamesEvent.AVERAGE_TIME_CHANGE, time));
         }
 
-        private function logoutCallback () :void
-        {
-            dispatchEvent (new MathGamesEvent (MathGamesEvent.LOGOUT));
-        }
 
         public function postMetrics (key:String, data:Object) :void
         {
