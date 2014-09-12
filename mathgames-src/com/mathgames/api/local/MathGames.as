@@ -83,7 +83,9 @@
             config["hosted_env"] = flashVars["hosted_env"];
             config["entity"] = flashVars["entity"];
 
-            _remote.loadSWF (API_SWF, _logFunc, function(err:String):void {
+            var swfUrl:String = config["__swf_url"] ? config["__swf_url"] : API_SWF;
+
+            _remote.loadSWF (swfUrl, _logFunc, function(err:String):void {
                 if (err) {
                     var errBox:ErrorDialog = new ErrorDialog;
                     _container.addChild (errBox);
