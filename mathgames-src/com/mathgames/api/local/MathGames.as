@@ -5,7 +5,7 @@
 
     final public class MathGames extends EventDispatcher implements IMathGames
     {
-        static private const PRODUCTION_API_SWF_URL :String = "https://api.mathgames.com/api-remote.swf";
+        static private const API_SWF :String = "https://api.mathgames.com/api-remote.swf";
 
     // ----- Persistent state ---------------------------------------------------------------------
 
@@ -83,11 +83,7 @@
             config["hosted_env"] = flashVars["hosted_env"];
             config["entity"] = flashVars["entity"];
 
-            var hostedOnStaging :Boolean = config["hosted"] && config["hosted_env"] === "staging";
-            var staging :Boolean = (config["force_staging"] || hostedOnStaging) && config["staging_swf"];
-            var swfUrl :String = staging ? config["staging_swf"] : PRODUCTION_API_SWF_URL;
-
-            _remote.loadSWF (swfUrl, _logFunc, function(err:String):void {
+            _remote.loadSWF (API_SWF, _logFunc, function(err:String):void {
                 if (err) {
                     var errBox:ErrorDialog = new ErrorDialog;
                     _container.addChild (errBox);
