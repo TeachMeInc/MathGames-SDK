@@ -17,6 +17,8 @@ package com.mathgames.api.local
         function startSession (config:Object) :void;
         function endSession () :void;
 
+        function moreMathGames () :void;
+
         function showSupportedSkillStandards () :void;
         function showProgress () :void;
 

@@ -2,10 +2,12 @@
 {
     import flash.display.*;
     import flash.events.*;
+    import flash.net.*;
 
     final public class MathGames extends EventDispatcher implements IMathGames
     {
         static private const API_SWF :String = "https://api.mathgames.com/api-remote.swf";
+        static private const MORE_MATHGAMES_URL :String = "http://www.mathgames.com/";
 
     // ----- Persistent state ---------------------------------------------------------------------
 
@@ -136,6 +138,11 @@
         public function endSession () :void
         {
             _remote.endSession ();
+        }
+
+        public function moreMathGames () :void
+        {
+            navigateToURL (new URLRequest (MORE_MATHGAMES_URL), "_blank");
         }
 
         public function showSupportedSkillStandards () :void
