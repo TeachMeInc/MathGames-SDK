@@ -9,7 +9,7 @@ package com.mathgames.api.local
     {
         static private const ERR_TRACK_URL :String =
             "https://analytics.mathgames.com/piwik.php?apiv=1&rec=1&idsite=1&_id=1234567898765432&"+
-            "url=www.mathgames.com&e_c=api-events&e_a=api-load-error&rand=";
+            "url=www.mathgames.com&e_c=api-events&e_a=api-load-error&e_n=";
 
         static private const DIALOG_WIDTH   :Number = 360;
         static private const DIALOG_HEIGHT  :Number = 106;
@@ -61,10 +61,10 @@ package com.mathgames.api.local
             dispatchEvent (new Event (Event.CLOSE));
         }
 
-        static private function trackError () :void
+        static private function trackError (apikey:String="") :void
         {
             var rand :String = Math.random().toString().substr(2);
-            var request :URLRequest = new URLRequest (ERR_TRACK_URL + rand);
+            var request :URLRequest = new URLRequest (ERR_TRACK_URL + apikey + "&rand=" + rand);
             request.method = URLRequestMethod.GET;
 
             var loader :URLLoader = new URLLoader();
