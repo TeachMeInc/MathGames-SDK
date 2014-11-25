@@ -1,16 +1,15 @@
 package com.mathgames.api.local
 {
-    import flash.display.*;
-    import flash.events.*;
-    import flash.net.*;
-    import flash.text.*;
+    import flash.display.SimpleButton;
+    import flash.display.Sprite;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.text.TextField;
+    import flash.text.TextFormat;
+    import flash.text.TextFormatAlign;
 
     final internal class ErrorDialog extends Sprite
     {
-        static private const ERR_TRACK_URL :String =
-            "https://analytics.mathgames.com/piwik.php?apiv=1&rec=1&idsite=1&_id=1234567898765432&"+
-            "url=www.mathgames.com&e_c=api-events&e_a=api-load-error&e_n=";
-
         static private const DIALOG_WIDTH   :Number = 360;
         static private const DIALOG_HEIGHT  :Number = 106;
         static private const DIALOG_PADDING :Number =  10;
@@ -50,8 +49,6 @@ package com.mathgames.api.local
             _button.y = -DIALOG_HEIGHT/2 + BUTTON_TOP;
             this.addChild(_button);
 
-            trackError ();
-
             _button.addEventListener (MouseEvent.CLICK, tryAgain_click);
         }
 
@@ -59,26 +56,6 @@ package com.mathgames.api.local
         {
             _button.removeEventListener (MouseEvent.CLICK, tryAgain_click);
             dispatchEvent (new Event (Event.CLOSE));
-        }
-
-        static private function trackError (apikey:String="") :void
-        {
-            var rand :String = Math.random().toString().substr(2);
-            var request :URLRequest = new URLRequest (ERR_TRACK_URL + apikey + "&rand=" + rand);
-            request.method = URLRequestMethod.GET;
-
-            var loader :URLLoader = new URLLoader();
-
-            function removeListeners (e:Event) :void {
-                loader.removeEventListener (Event.COMPLETE, removeListeners);
-                loader.removeEventListener (IOErrorEvent.IO_ERROR, removeListeners);
-                loader.removeEventListener (SecurityErrorEvent.SECURITY_ERROR, removeListeners);
-            }
-            loader.addEventListener (Event.COMPLETE, removeListeners);
-            loader.addEventListener (IOErrorEvent.IO_ERROR, removeListeners);
-            loader.addEventListener (SecurityErrorEvent.SECURITY_ERROR, removeListeners);
-
-            loader.load (request);
         }
 
         static private function button (label:String) :SimpleButton

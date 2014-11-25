@@ -1,13 +1,19 @@
 ﻿package com.mathgames.api.local
 {
-    import flash.display.*;
-    import flash.events.*;
-    import flash.net.*;
+    import flash.display.BitmapData;
+    import flash.display.DisplayObjectContainer;
+    import flash.display.Stage;
+    import flash.events.Event;
+    import flash.events.EventDispatcher;
+    import flash.net.URLRequest;
+    import flash.net.navigateToURL;
 
     final public class MathGames extends EventDispatcher implements IMathGames
     {
         static private const API_SWF :String = "https://api.mathgames.com/api-remote.swf";
         static private const MORE_MATHGAMES_URL :String = "http://www.mathgames.com/";
+
+        static private const CONNECTION_ATTEMPTS_UNTIL_DIALOG :int = 3;
 
     // ----- Persistent state ---------------------------------------------------------------------
 
@@ -15,6 +21,8 @@
         private var _stage     :Stage;
         private var _container :DisplayObjectContainer;
         private var _remote    :RemoteSWF;
+
+        private var _failedConnAttempts :int = 0;
 
     // ----- Singleton instantiation stuff --------------------------------------------------------
 
@@ -89,29 +97,54 @@
 
             _remote.loadSWF (swfUrl, _logFunc, function(err:String):void {
                 if (err) {
-                    var errBox:ErrorDialog = new ErrorDialog;
-                    _container.addChild (errBox);
-                    errBox.addEventListener (Event.CLOSE, function(e:Event):void {
-                        _container.removeChild (errBox);
+                    if (_failedConnAttempts === 0) {
+                        Tracking.trackEvent (Tracking.LOAD_ERROR, config["api_key"]);
+                    }
+
+                    _failedConnAttempts++;
+
+                    if (_failedConnAttempts >= CONNECTION_ATTEMPTS_UNTIL_DIALOG) {
+                        Tracking.trackEvent (Tracking.RELOAD_DIALOG, config["api_key"]);
+                        showConnectionFailedDialog (config);
+                    } else {
+                        Tracking.trackEvent (Tracking.RELOAD_ATTEMPT, config["api_key"]);
                         connect (container, config);
-                    },false,0,true);
-                    return;
-                }
+                    }
+                } else {
+                    if (_failedConnAttempts > 0) {
+                        Tracking.trackEvent (Tracking.RELOAD_SUCCESS, config["api_key"]);
+                    }
 
-                _remote.contents.x = 0;
-                _remote.contents.y = 0;
-                _container.addChild (_remote.contents);
+                    _remote.contents.x = 0;
+                    _remote.contents.y = 0;
+                    _container.addChild (_remote.contents);
 
-                _remote.initialize (config);
+                    _remote.initialize (config);
 
-                _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
-                _stage.addEventListener (Event.RESIZE, function (e:Event) :void {
                     _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
-                });
+                    _stage.addEventListener (Event.RESIZE, function (e:Event) :void {
+                        _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
+                    });
 
-                dispatchEvent (new MathGamesEvent (MathGamesEvent.CONNECTED));
+                    dispatchEvent (new MathGamesEvent (MathGamesEvent.CONNECTED));
+                }
             });
         }
+
+        private function showConnectionFailedDialog (config:Object) :void
+        {
+            var errBox:ErrorDialog = new ErrorDialog;
+            _container.addChild (errBox);
+
+            function onClose (e:Event) :void {
+                errBox.removeEventListener (Event.CLOSE, onClose);
+                _container.removeChild (errBox);
+                connect (_container, config);
+            }
+
+            errBox.addEventListener (Event.CLOSE, onClose);
+        }
+
 
         public function selectSkill () :void
         {
