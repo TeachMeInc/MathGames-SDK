@@ -1,4 +1,4 @@
-﻿package com.mathgames.api.local
+package com.mathgames.api.local
 {
     import flash.display.BitmapData;
     import flash.display.DisplayObjectContainer;
