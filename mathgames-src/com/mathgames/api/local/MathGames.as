@@ -95,6 +95,12 @@ package com.mathgames.api.local
 
             var swfUrl:String = config["__swf_url"] ? config["__swf_url"] : API_SWF;
 
+            if (config["api"]) {
+                _remote.loadLinkedAPI (config["api"], _logFunc);
+                onLoadSuccess (config);
+                return;
+            }
+
             _remote.loadSWF (swfUrl, _logFunc, function(err:String):void {
                 if (err) {
                     if (_failedConnAttempts === 0) {
@@ -115,20 +121,25 @@ package com.mathgames.api.local
                         Tracking.trackEvent (Tracking.RELOAD_SUCCESS, config["api_key"]);
                     }
 
-                    _remote.contents.x = 0;
-                    _remote.contents.y = 0;
-                    _container.addChild (_remote.contents);
-
-                    _remote.initialize (config);
-
-                    _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
-                    _stage.addEventListener (Event.RESIZE, function (e:Event) :void {
-                        _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
-                    });
-
-                    dispatchEvent (new MathGamesEvent (MathGamesEvent.CONNECTED));
+                    onLoadSuccess (config);
                 }
             });
+        }
+
+        private function onLoadSuccess (config:Object) :void
+        {
+            _remote.contents.x = 0;
+            _remote.contents.y = 0;
+            _container.addChild (_remote.contents);
+
+            _remote.initialize (config);
+
+            _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
+            _stage.addEventListener (Event.RESIZE, function (e:Event) :void {
+                _remote.notifyStageResize (_stage.stageWidth, _stage.stageHeight, _container.scaleX, _container.scaleY);
+            });
+
+            dispatchEvent (new MathGamesEvent (MathGamesEvent.CONNECTED));
         }
 
         private function showConnectionFailedDialog (config:Object) :void

@@ -1,9 +1,16 @@
-package com.mathgames.api.local
+﻿package com.mathgames.api.local
 {
-    import flash.display.*;
-    import flash.events.*;
-    import flash.net.*;
-    import flash.utils.*;
+    import flash.display.DisplayObject;
+    import flash.displat.Sprite;
+    import flash.display.Loader;
+    import flash.events.Event;
+    import flash.events.HTTPStatusEvent;
+    import flash.events.IOErrorEvent;
+    import flash.events.ProgressEvent;
+    import flash.events.SecurityErrorEvent;
+    import flash.net.URLRequest;
+    import flash.net.URLRequestMethod;
+    import flash.utils.getDefinitionByName;
 
     final internal class RemoteSWF
     {
@@ -23,12 +30,28 @@ package com.mathgames.api.local
 
         private var _swfLoader :Loader;
         private var _swfLoadCallback :Function;
-        private var _swfContent :MovieClip;
+        private var _swfContent :*;
 
         private var _log :Function;
 
         public function get loaded () :Boolean { return _swfContent != null }
         public function get contents () :DisplayObject { return _swfLoader || _swfContent }
+
+
+        /**
+         * Load the API if it has been statically linked to the project
+         */
+        public function loadLinkedAPI (api:*, log:Function) :void
+        {
+            _log = log;
+            _log ("!!! Using statically linked API SWF !!!");
+
+            _swfLoader = null;
+            _swfLoadCallback = null;
+
+            _swfContent = api;
+            _swfContent.notifyVersion (SDK_VERSION_CODE);
+        }
 
         /**
          * Loads the remote MathGames resources SWF.
@@ -40,28 +63,13 @@ package com.mathgames.api.local
             _log = log;
             _swfLoadCallback = callback;
 
-            var linkedApi :Class;
+            _swfLoader = new Loader;
+            swfLoader_addListeners ();
+            if (BUST_CACHE) swfUrl += "?_=" + Math.random().toString().substr(2);
 
-            try {
-                linkedApi = getDefinitionByName("com.mathgames.api.remote.SWFMain") as Class;
-            } catch (e:Error) {
-                linkedApi = null;
-            }
-
-            if (linkedApi) {
-                _swfLoader = null;
-                _swfContent = new linkedApi;
-                _log ("!!! Using statically linked API SWF !!!");
-                _swfLoadCallback (null);
-            } else {
-                _swfLoader = new Loader;
-                swfLoader_addListeners ();
-                if (BUST_CACHE) swfUrl += "?_=" + Math.random().toString().substr(2);
-
-                var req:URLRequest = new URLRequest (swfUrl);
-                req.method = URLRequestMethod.GET;
-                _swfLoader.load (req);
-            }
+            var req:URLRequest = new URLRequest (swfUrl);
+            req.method = URLRequestMethod.GET;
+            _swfLoader.load (req);
         }
 
         private function swfLoader_addListeners () :void
@@ -101,7 +109,7 @@ package com.mathgames.api.local
 
             var err:String = null;
             try {
-                _swfContent = _swfLoader.content as MovieClip;
+                _swfContent = _swfLoader.content;
                 _swfContent.notifyVersion (SDK_VERSION_CODE);
             } catch (e:Error) {
                 err = e.toString ();
