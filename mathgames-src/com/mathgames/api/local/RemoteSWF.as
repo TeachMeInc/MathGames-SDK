@@ -1,7 +1,6 @@
 ﻿package com.mathgames.api.local
 {
     import flash.display.DisplayObject;
-    import flash.displat.Sprite;
     import flash.display.Loader;
     import flash.events.Event;
     import flash.events.HTTPStatusEvent;
@@ -10,7 +9,6 @@
     import flash.events.SecurityErrorEvent;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
-    import flash.utils.getDefinitionByName;
 
     final internal class RemoteSWF
     {
