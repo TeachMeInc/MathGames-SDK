@@ -34,18 +34,17 @@ package
             trace (">> Loading MathGames remote resources SWF...");
 
             _mathgames.addEventListener (MathGamesEvent.CONNECTED, mathgames_connected);
-            _mathgames.addEventListener (MathGamesEvent.LOGOUT, mathgames_logout);
             _mathgames.addEventListener (MathGamesEvent.ERROR, mathgames_error);
-            _mathgames.addEventListener (MathGamesEvent.AUTH_CANCELLED, mathgames_authCancel);
-            _mathgames.addEventListener (MathGamesEvent.AUTHENTICATED, mathgames_authComplete);
+            _mathgames.addEventListener (MathGamesEvent.SKILL_SELECT_CANCELLED, mathgames_skillSelectCancelled);
+            _mathgames.addEventListener (MathGamesEvent.SKILL_SELECTED, mathgames_skillSelected);
             _mathgames.addEventListener (MathGamesEvent.SESSION_READY, mathgames_sessionReady);
-            _mathgames.addEventListener (MathGamesEvent.PROGRESS_OPENED, mathgames_progressOpened);
             _mathgames.addEventListener (MathGamesEvent.PROGRESS_CLOSED, mathgames_progressClosed);
             _questionPanel.addEventListener (QuestionPanelEvent.ANSWER, question_answer);
 
             _game = new GameController (this.ball);
 
             _mathgames.connect (apiHolder, {
+                "__api_url": "https://api.mathgames.com/",
                 "api_key": "528e1abeb4967cb32b00028e",
                 "pool_key": "COMPLETE",
                 "log_func": trace
@@ -58,23 +57,18 @@ package
             trace (e.data as String);
         }
 
-        private function mathgames_logout (e:MathGamesEvent) :void
-        {
-            trace (">> Logged out.");
-        }
-
         private function mathgames_connected (e:MathGamesEvent) :void
         {
             trace (">> mathgames_connected");
-            _mathgames.authenticate ();
+            _mathgames.selectSkill ();
         }
 
-        private function mathgames_authCancel (e:MathGamesEvent) :void
+        private function mathgames_skillSelectCancelled (e:MathGamesEvent) :void
         {
             trace (">> Auth cancelled.");
         }
 
-        private function mathgames_authComplete (e:MathGamesEvent) :void
+        private function mathgames_skillSelected (e:MathGamesEvent) :void
         {
             trace (">> mathgames_authComplete");
             newSession ();
@@ -119,14 +113,10 @@ package
         private function question_answer (e:QuestionPanelEvent) :void
         {
             if (!_game.answerQuestion (e.correct)) {
+                _mathgames.endSession ();
                 _game.stop ();
                 _mathgames.showProgress ();
             }
-        }
-
-        private function mathgames_progressOpened (e:MathGamesEvent) :void
-        {
-            trace (">> Progress panel opened.");
         }
 
         private function mathgames_progressClosed (e:MathGamesEvent) :void
