@@ -170,14 +170,3 @@ class GameController
         return _targetX > 95 && _targetX < 565;
     }
 }
-
-
-// The following block is used internally by TeachMe Inc for debugging.
-// You can safely ignore it.
-CONFIG::DEV {
-import com.mathgames.api.remote.SWFMain;
-class __forceApiImport extends SWFMain {}
-}
-
-
-
