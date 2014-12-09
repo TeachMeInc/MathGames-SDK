@@ -5,13 +5,13 @@ package
     import flash.display.*;
     import flash.events.*;
 
-    public class SampleGameMain extends MovieClip
+    public class SampleGame extends MovieClip
     {
         private var _mathgames :IMathGames;
         private var _game :GameController;
         private var _questionPanel :QuestionPanel;
 
-        public function SampleGameMain ()
+        public function SampleGame ()
         {
             _mathgames = MathGames.instance;
             _questionPanel = new QuestionPanel (_mathgames);
