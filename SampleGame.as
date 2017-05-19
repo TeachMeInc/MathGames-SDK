@@ -44,7 +44,6 @@ package
             _game = new GameController (this.ball);
 
             _mathgames.connect (apiHolder, {
-                "__api_url": "https://api.mathgames.com/",
                 "api_key": "528e1abeb4967cb32b00028e",
                 "pool_key": "COMPLETE",
                 "log_func": trace
